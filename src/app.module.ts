@@ -4,12 +4,13 @@ import { AppService } from './app.service';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { PrismaService } from './shared/database/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthService } from './modules/auth/application/service/auth.service';
+import { PrismaModule } from './shared/database/prisma.module';
+
 
 @Module({
-  imports: [CategoriesModule, AuthModule],
+  imports: [CategoriesModule, AuthModule, PrismaModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
-  exports: [PrismaService],
+  providers: [AppService],
 })
 export class AppModule {}
