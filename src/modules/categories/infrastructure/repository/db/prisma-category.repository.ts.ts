@@ -32,6 +32,6 @@ export class PrismaCategoryRepository implements CategoryRepository {
     throw new Error('Method not implemented.');
   }
   findAllCategories(): Promise<Category[]> {
-    throw new Error('Method not implemented.');
+    return this.prisma.category.findMany();
   }
 }
