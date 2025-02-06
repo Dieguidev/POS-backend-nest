@@ -8,10 +8,13 @@ import { PrismaUserRepository } from './infrastructure/repositoriesImpl/prisma-u
 import { PrismaService } from 'src/shared/database/prisma.service';
 import { PrismaModule } from 'src/shared/database/prisma.module';
 import { UserRepository } from './domain/repositories/user.repository';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
   providers: [
+    JwtStrategy,
     AuthService,
     {
       provide: UserRepository,
@@ -20,14 +23,19 @@ import { UserRepository } from './domain/repositories/user.repository';
     PrismaService,
   ],
   imports: [
-    JwtModule.register({
-      global: true,
-      secret: envs.jwtSecret,
-      signOptions: {
-        expiresIn: '60s',
-      },
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: envs.jwtSecret,
+        signOptions: {
+          expiresIn: '2h'
+        }
+      })
     }),
 
   ],
+  exports:[JwtStrategy]
 })
 export class AuthModule {}

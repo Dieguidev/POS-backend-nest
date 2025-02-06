@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "*",
@@ -32,6 +33,7 @@
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
     "joi": "^17.13.3",
+    "passport-jwt": "^4.0.1",
     "pos-backend-nest": "file:",
     "prisma": "^6.3.1",
     "reflect-metadata": "^0.1.13",
