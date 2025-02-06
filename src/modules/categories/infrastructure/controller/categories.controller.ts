@@ -17,7 +17,7 @@ export class CategoriesController {
   }
 
   @Get()
-  @Auth(ValidRoles.superUser)
+  @Auth(ValidRoles.admin)
   findAll() {
     return this.categoriesService.findAll();
   }
