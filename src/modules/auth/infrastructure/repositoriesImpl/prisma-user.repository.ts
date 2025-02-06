@@ -14,8 +14,11 @@ export class PrismaUserRepository implements UserRepository {
     return this.prisma.user.findUnique({ where: { email }, include: { roles: true } });
   }
 
-  async create(dto: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({ data: dto, include: { roles: true } });
+  async create(email:string, password: string): Promise<User> {
+    return this.prisma.user.create({ data: {
+      password,
+      email
+    }, include: { roles: true } });
   }
 
   async findById(id: number): Promise<User | null> {

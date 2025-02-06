@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 
 import { UserRepository } from '../../domain/repositories/user.repository';
 import { User } from '@prisma/client';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 
 
@@ -15,9 +16,19 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(email: string, password: string): Promise<User> {
+  async register(dto: CreateUserDto): Promise<User> {
+    const { password, email, confirmPassword } = dto;
+    if (password !== confirmPassword) {
+      throw new UnauthorizedException('Passwords do not match');
+    }
+
+    const existsEmail = await this.userRepository.findByEmail(email);
+    if (existsEmail) {
+      throw new UnauthorizedException('Email ya registrado');
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    return this.userRepository.create({ email, password: hashedPassword });
+    return this.userRepository.create(email, hashedPassword);
   }
 
   async validateUser(email: string, password: string): Promise<User | null> {
