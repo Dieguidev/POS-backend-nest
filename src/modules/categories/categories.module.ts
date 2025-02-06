@@ -5,6 +5,7 @@ import { CategoriesService } from './application/service/categories.service';
 import { CategoryRepository } from './domain/repository/CategoryRepository';
 import { PrismaCategoryRepository } from './infrastructure/repository/db/prisma-category.repository.ts';
 import { PrismaService } from 'src/shared/database/prisma.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [CategoriesController],
@@ -15,5 +16,6 @@ import { PrismaService } from 'src/shared/database/prisma.service';
     },
     PrismaService
   ],
+  imports: [AuthModule]
 })
 export class CategoriesModule {}

@@ -3,7 +3,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { CreateCategoryDto } from '../../application/dto/create-category.dto';
 import { UpdateCategoryDto } from '../../application/dto/update-category.dto';
 import { CategoriesService } from '../../application/service/categories.service';
-import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { Auth } from 'src/modules/auth/decorators';
+import { ValidRoles } from 'src/modules/auth/interfaces';
+
 
 @Controller('categories')
 export class CategoriesController {
@@ -15,7 +17,7 @@ export class CategoriesController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @Auth(ValidRoles.superUser)
   findAll() {
     return this.categoriesService.findAll();
   }

@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { sub: user.id }; // Solo el ID del usuario en el JWT
+    const payload = { id: user.id }; // Solo el ID del usuario en el JWT
     return {
       access_token: this.jwtService.sign(payload),
     };

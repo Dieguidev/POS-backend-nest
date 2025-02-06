@@ -27,6 +27,8 @@ export class UserRoleGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const user = req.user as User;
 
+
+
     if (!user) throw new BadRequestException('User not found');
 
     //* Cuando al usuario viene solo con un rol
@@ -38,6 +40,7 @@ export class UserRoleGuard implements CanActivate {
 
     //* Cuando al usuario viene con un array de roles
     if (user.roles.some(role => validRoles.includes(role.name))) {
+
       return true;
     }
 

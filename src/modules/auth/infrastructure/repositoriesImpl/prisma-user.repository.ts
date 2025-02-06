@@ -5,7 +5,6 @@ import { User } from 'src/modules/auth/domain/entities/user.entity';
 
 import { PrismaService } from 'src/shared/database/prisma.service';
 
-
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -18,25 +17,32 @@ export class PrismaUserRepository implements UserRepository {
     return this.mapUser(user);
   }
 
-  async create(email:string, password: string): Promise<User> {
-    const user =await this.prisma.user.create({ data: {
-      password,
-      email,
-      roles: {
-        create: [
-          {
-            roleId:1
-          }
-        ]
-      }
-    }, include: { roles: { include: { role: true } } } });
+  async create(email: string, password: string): Promise<User> {
+    const user = await this.prisma.user.create({
+      data: {
+        password,
+        email,
+        roles: {
+          create: [
+            {
+              roleId: 1,
+            },
+          ],
+        },
+      },
+      include: { roles: { include: { role: true } } },
+    });
     console.log(user);
 
     return this.mapUser(user);
   }
 
   async findById(id: number): Promise<User | null> {
-    const user =await  this.prisma.user.findUnique({ where: { id }, include: { roles:{ include: { role: true } } } });
+
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { roles: { include: { role: true } } },
+    });
     return this.mapUser(user);
   }
 
