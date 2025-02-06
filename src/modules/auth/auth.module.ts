@@ -27,7 +27,7 @@ import { UserRepository } from './domain/repositories/user.repository';
         expiresIn: '60s',
       },
     }),
-    PrismaModule
+
   ],
 })
 export class AuthModule {}
