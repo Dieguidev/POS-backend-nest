@@ -21,9 +21,9 @@ import { PassportModule } from '@nestjs/passport';
       provide: UserRepository,
       useClass: PrismaUserRepository,
     },
-    PrismaService,
   ],
   imports: [
+    PrismaModule,
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
