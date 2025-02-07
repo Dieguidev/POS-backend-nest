@@ -2,20 +2,38 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ProductRepository } from '../../domain/repositories/ProductRepository';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class ProductsService {
-
-  constructor(
-      private readonly productRepository: ProductRepository
-    ) {}
+  constructor(private readonly productRepository: ProductRepository) {}
 
   create(createProductDto: CreateProductDto) {
     return this.productRepository.createProduct(createProductDto);
   }
 
-  findAll() {
-    return this.productRepository.findAllProducts();
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, page = 1 } = paginationDto;
+
+    const [total, products] = await Promise.all([
+      this.productRepository.countAllProducts(),
+      this.productRepository.findAllProducts(paginationDto),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      total,
+      page,
+      totalPages,
+      next:
+        total - page * limit > 0
+          ? `/api/products?page=${page + 1}&limit=${limit}`
+          : null,
+      prev:
+        page - 1 > 0 ? `/api/products?page=${page - 1}&limit=${limit}` : null,
+      data: products,
+    };
   }
 
   findOne(id: number) {
