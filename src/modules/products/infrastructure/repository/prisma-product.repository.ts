@@ -60,8 +60,10 @@ export class PrismaProductRepository implements ProductRepository {
       },
     });
   }
-  deleteProduct(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async deleteProduct(id: number): Promise<string> {
+    await this.findProductById(id);
+    await this.prisma.product.delete({ where: { id } });
+    return 'Producto eliminado';
   }
   async findProductById(id: number): Promise<Product> {
     const product = await this.prisma.product.findUnique({

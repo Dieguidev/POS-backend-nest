@@ -7,7 +7,7 @@ import { UpdateProductDto } from '../../application/dto/update-product.dto';
 export abstract class ProductRepository {
   abstract createProduct(createproductDto: CreateProductDto): Promise<Product>;
   abstract updateProduct(id: number, updateProductDto: UpdateProductDto): Promise<Product>;
-  abstract deleteProduct(): Promise<void>;
+  abstract deleteProduct(id: number): Promise<string>;
   abstract findProductById(id: number): Promise<Product>;
   abstract findAllProducts(
     productPaginationDto: ProductPaginationDto,
