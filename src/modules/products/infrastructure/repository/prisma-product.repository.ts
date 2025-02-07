@@ -38,15 +38,17 @@ export class PrismaProductRepository implements ProductRepository {
   ): Promise<Product> {
 
     const { categoryId, inventory, name, price } = updateProductDto;
-
-    const category = await this.prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
-    });
-    if (!category) {
-      throw new NotFoundException('Categoria no encontrada');
+    if (categoryId) {
+      const category = await this.prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
+      });
+      if (!category) {
+        throw new NotFoundException('Categoria no encontrada');
+      }
     }
+
     await this.findProductById(id);
     return await this.prisma.product.update({
       where: { id },
