@@ -3,6 +3,7 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ProductRepository } from '../../domain/repositories/ProductRepository';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ProductPaginationDto } from '../dto/product-pagination.dto';
 
 @Injectable()
 export class ProductsService {
@@ -12,12 +13,12 @@ export class ProductsService {
     return this.productRepository.createProduct(createProductDto);
   }
 
-  async findAll(paginationDto: PaginationDto) {
-    const { limit = 10, page = 1 } = paginationDto;
+  async findAll(productPaginationDto: ProductPaginationDto) {
+    const { limit = 10, page = 1, category_id } = productPaginationDto;
 
     const [total, products] = await Promise.all([
-      this.productRepository.countAllProducts(),
-      this.productRepository.findAllProducts(paginationDto),
+      this.productRepository.countAllProducts(category_id),
+      this.productRepository.findAllProducts(productPaginationDto),
     ]);
 
     const totalPages = Math.ceil(total / limit);
