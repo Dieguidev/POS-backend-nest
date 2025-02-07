@@ -38,7 +38,10 @@ export class PrismaProductRepository implements ProductRepository {
     throw new Error('Method not implemented.');
   }
   findAllProducts(): Promise<Product[]> {
-    const products = this.prisma.product.findMany({include:{category:true}});
+    const products = this.prisma.product.findMany({
+      include: { category: { select: { name: true, id: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
     return products;
   }
 }
