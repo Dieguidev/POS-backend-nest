@@ -37,7 +37,8 @@ export class PrismaProductRepository implements ProductRepository {
   findProductById(): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  findAllProducts(): Promise<void> {
-    throw new Error('Method not implemented.');
+  findAllProducts(): Promise<Product[]> {
+    const products = this.prisma.product.findMany({include:{category:true}});
+    return products;
   }
 }
