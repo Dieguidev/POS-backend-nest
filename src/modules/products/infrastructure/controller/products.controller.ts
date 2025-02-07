@@ -1,10 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CreateProductDto } from '../../application/dto/create-product.dto';
 import { ProductsService } from '../../application/service/products.service';
 import { UpdateProductDto } from '../../application/dto/update-product.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ProductPaginationDto } from '../../application/dto/product-pagination.dto';
-
+import { IdValidationPipe } from 'src/common/pipes/id-validation.pipe';
 
 @Controller('products')
 export class ProductsController {
@@ -21,17 +30,17 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', IdValidationPipe) id: string) {
     return this.productsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  update(@Param('id', IdValidationPipe) id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', IdValidationPipe) id: string) {
     return this.productsService.remove(+id);
   }
 }

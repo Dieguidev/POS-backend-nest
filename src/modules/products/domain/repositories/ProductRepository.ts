@@ -1,13 +1,16 @@
-import { Product } from "../entities/product.entity";
+import { Product } from '../entities/product.entity';
 import { CreateProductDto } from '../../application/dto/create-product.dto';
 
-import { ProductPaginationDto } from "../../application/dto/product-pagination.dto";
+import { ProductPaginationDto } from '../../application/dto/product-pagination.dto';
+import { UpdateProductDto } from '../../application/dto/update-product.dto';
 
 export abstract class ProductRepository {
   abstract createProduct(createproductDto: CreateProductDto): Promise<Product>;
-  abstract updateProduct(): Promise<void>;
+  abstract updateProduct(id: number, updateProductDto: UpdateProductDto): Promise<Product>;
   abstract deleteProduct(): Promise<void>;
-  abstract findProductById(): Promise<void>;
-  abstract findAllProducts(productPaginationDto: ProductPaginationDto): Promise<Product[]>;
+  abstract findProductById(id: number): Promise<Product>;
+  abstract findAllProducts(
+    productPaginationDto: ProductPaginationDto,
+  ): Promise<Product[]>;
   abstract countAllProducts(category_id: number): Promise<number>;
 }

@@ -5,6 +5,7 @@ import { Product } from '../../domain/entities/product.entity';
 import { CreateProductDto } from '../../application/dto/create-product.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ProductPaginationDto } from '../../application/dto/product-pagination.dto';
+import { UpdateProductDto } from '../../application/dto/update-product.dto';
 
 @Injectable()
 export class PrismaProductRepository implements ProductRepository {
@@ -31,23 +32,54 @@ export class PrismaProductRepository implements ProductRepository {
 
     return product;
   }
-  updateProduct(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async updateProduct(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
+
+    const { categoryId, inventory, name, price } = updateProductDto;
+
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+    if (!category) {
+      throw new NotFoundException('Categoria no encontrada');
+    }
+    await this.findProductById(id);
+    return await this.prisma.product.update({
+      where: { id },
+      data: {
+        categoryId,
+        inventory,
+        name,
+        price,
+      },
+    });
   }
   deleteProduct(): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  findProductById(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async findProductById(id: number): Promise<Product> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: { category: { select: { name: true, id: true } } },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
+    }
+
+    return product;
   }
-  findAllProducts(
+  async findAllProducts(
     productPaginationDto: ProductPaginationDto,
   ): Promise<Product[]> {
     const { limit = 10, page = 1, category_id } = productPaginationDto;
     const skip = (page - 1) * limit;
-    console.log('skip', skip);
 
-    const products = this.prisma.product.findMany({
+    const products = await this.prisma.product.findMany({
       where: { categoryId: category_id ? category_id : undefined },
       include: {
         category: { select: { name: true, id: true } },
