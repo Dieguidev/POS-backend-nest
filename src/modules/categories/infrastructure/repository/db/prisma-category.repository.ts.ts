@@ -22,11 +22,25 @@ export class PrismaCategoryRepository implements CategoryRepository {
     return category;
   }
 
-  updateCategory(id: number, name: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async updateCategory(id: number, name: string): Promise<Category> {
+    await this.findCategoryById(id);
+     return await this.prisma.category.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    });
   }
-  deleteCategory(id: number): Promise<void> {
-    throw new Error('Method not implemented.');
+  async deleteCategory(id: number): Promise<string> {
+    await this.findCategoryById(id);
+    await this.prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+    return 'Categoria eliminada';
   }
   async findCategoryById(id: number): Promise<Category> {
     const category = await this.prisma.category.findUnique({
