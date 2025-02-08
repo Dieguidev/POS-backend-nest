@@ -13,48 +13,9 @@ import { NotFoundError } from 'rxjs';
 export class PrismaTransactionsRepository implements TransactionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createTransaction(
-    createTransactionDto: CreateTransactionDto,
-  ): Promise<TransactionEntity> {
+  async createTransaction(createTransactionDto: CreateTransactionDto,): Promise<TransactionEntity> {
     const transaction = await this.prisma.$transaction(async (prisma) => {
-      // for (const content of createTransactionDto.contents) {
-      //   const product = await prisma.product.findUnique({
-      //     where: { id: content.productId },
-      //   });
-      //   if (!product) {
-      //     throw new NotFoundException(
-      //       `Product with id ${content.productId} not found`,
-      //     );
-      //   }
-      //   if (product.inventory < content.quantity) {
-      //     throw new BadRequestException(
-      //       `Product with id ${content.productId} has insufficient stock`,
-      //     );
-      //   } else {
-      //     await prisma.product.update({
-      //       where: { id: content.productId },
-      //       data: {
-      //         inventory: product.inventory - content.quantity,
-      //       },
-      //     });
-      //   }
-      // }
-
-      // return await this.prisma.transaction.create({
-      //   data: {
-      //     total: createTransactionDto.total,
-      //     contents: {
-      //       createMany: {
-      //         data: createTransactionDto.contents,
-      //       },
-      //     },
-      //   },
-      //   include: {
-      //     contents: true,
-      //   },
-      // });
-
-      const productIds = createTransactionDto.contents.map((c) => c.productId);
+      const productIds = createTransactionDto.contents.map((content) => content.productId);
       const products = await prisma.product.findMany({
         where: { id: { in: productIds } },
       });
