@@ -4,6 +4,6 @@ export class TransactionContentEntity {
   id: number;
   quantity: number;
   price: number;
-  product: Product;
   productId: number;
+  product?: Product;
 }
