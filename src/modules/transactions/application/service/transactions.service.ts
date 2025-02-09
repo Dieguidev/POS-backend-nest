@@ -33,6 +33,6 @@ export class TransactionsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} Transaction`;
+    return this.transactionsRepository.removeTransaction(id);
   }
 }

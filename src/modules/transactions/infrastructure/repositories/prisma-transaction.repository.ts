@@ -50,10 +50,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
         ),
       );
 
-      const total = createTransactionDto.contents.reduce(
-        (acc, content) => acc + Math.round(content.price * 100) * content.quantity,
-        0,
-      )/100;
+      const total =
+        createTransactionDto.contents.reduce(
+          (acc, content) =>
+            acc + Math.round(content.price * 100) * content.quantity,
+          0,
+        ) / 100;
 
       console.log(total);
 
@@ -73,7 +75,6 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     return transaction;
   }
   async findAllTransactions(date: Date): Promise<TransactionEntity[]> {
-
     const startOfDay = new Date(date.setUTCHours(0, 0, 0, 0));
     const endOfDay = new Date(date.setUTCHours(23, 59, 59, 999));
 
@@ -82,17 +83,17 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
         transactionDate: {
           gte: startOfDay,
           lte: endOfDay,
-        }
+        },
       },
       include: { contents: true },
-    })
+    });
     return transactions;
   }
   async findOneTransaction(id: number): Promise<TransactionEntity> {
     const transaction = await this.prisma.transaction.findUnique({
       where: { id },
       include: { contents: true },
-    })
+    });
     if (!transaction) {
       throw new NotFoundException(`Transacción no encontrada`);
     }
@@ -101,7 +102,28 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
   updateTransaction(): Promise<TransactionEntity> {
     throw new Error('Method not implemented.');
   }
-  removeTransaction(): Promise<string> {
-    throw new Error('Method not implemented.');
+
+  async removeTransaction(id: number): Promise<string> {
+    await this.prisma.$transaction(async (prisma) => {
+      const transaction = await this.findOneTransaction(id);
+
+      await Promise.all(
+        transaction.contents.map((content) =>
+          prisma.product.update({
+            where: { id: content.productId },
+            data: { inventory: { increment: content.quantity } },
+          }),
+        ),
+      );
+
+      await prisma.transactionContent.deleteMany({
+        where: { transactionId: transaction.id },
+      });
+
+      await prisma.transaction.delete({
+        where: { id },
+      });
+    });
+    return 'venta eliminada';
   }
 }
