@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
 import { UpdateTransactionDto } from '../dto/update-transaction.dto';
 import { TransactionsRepository } from '../../domain/repositories/TransactionsRepository';
+import { isValid, parseISO } from 'date-fns';
 
 @Injectable()
 export class TransactionsService {
@@ -14,8 +15,17 @@ export class TransactionsService {
     return this.transactionsRepository.createTransaction(createTransactionDto);
   }
 
-  findAll() {
-    return `This action returns all Transactions`;
+  findAll(transactionDate: string) {
+    if (transactionDate){
+
+      const date = parseISO(transactionDate);
+      console.log(date);
+      if (!isValid(date)) {
+        throw new BadRequestException('Fecha no válida');
+      }
+      return this.transactionsRepository.findAllTransactions(date);
+    }
+
   }
 
   findOne(id: number) {

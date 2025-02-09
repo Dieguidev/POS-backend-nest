@@ -72,8 +72,21 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
     return transaction;
   }
-  findAllTransactions(): Promise<TransactionEntity> {
-    throw new Error('Method not implemented.');
+  async findAllTransactions(date: Date): Promise<TransactionEntity[]> {
+
+    const startOfDay = new Date(date.setUTCHours(0, 0, 0, 0));
+    const endOfDay = new Date(date.setUTCHours(23, 59, 59, 999));
+
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        transactionDate: {
+          gte: startOfDay,
+          lte: endOfDay,
+        }
+      },
+      include: { contents: true },
+    })
+    return transactions;
   }
   findOneTransaction(): Promise<TransactionEntity> {
     throw new Error('Method not implemented.');
