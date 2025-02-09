@@ -6,9 +6,8 @@ import { isValid, parseISO } from 'date-fns';
 
 @Injectable()
 export class TransactionsService {
-
   constructor(
-    private readonly transactionsRepository: TransactionsRepository
+    private readonly transactionsRepository: TransactionsRepository,
   ) {}
 
   create(createTransactionDto: CreateTransactionDto) {
@@ -16,20 +15,17 @@ export class TransactionsService {
   }
 
   findAll(transactionDate: string) {
-    if (transactionDate){
-
+    if (transactionDate) {
       const date = parseISO(transactionDate);
-      console.log(date);
       if (!isValid(date)) {
         throw new BadRequestException('Fecha no válida');
       }
       return this.transactionsRepository.findAllTransactions(date);
     }
-
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} Transaction`;
+    return this.transactionsRepository.findOneTransaction(id);
   }
 
   update(id: number, updateTransactionDto: UpdateTransactionDto) {

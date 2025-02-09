@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { TransactionsService } from '../../application/service/transactions.service';
 import { CreateTransactionDto } from '../../application/dto/create-transaction.dto';
 import { UpdateTransactionDto } from '../../application/dto/update-transaction.dto';
+import { IdValidationPipe } from 'src/common/pipes/id-validation.pipe';
 
 
 @Controller('transactions')
@@ -19,7 +20,7 @@ export class TransactionsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', IdValidationPipe) id: string) {
     return this.transactionsService.findOne(+id);
   }
 

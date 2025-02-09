@@ -88,8 +88,15 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     })
     return transactions;
   }
-  findOneTransaction(): Promise<TransactionEntity> {
-    throw new Error('Method not implemented.');
+  async findOneTransaction(id: number): Promise<TransactionEntity> {
+    const transaction = await this.prisma.transaction.findUnique({
+      where: { id },
+      include: { contents: true },
+    })
+    if (!transaction) {
+      throw new NotFoundException(`Transacción no encontrada`);
+    }
+    return transaction;
   }
   updateTransaction(): Promise<TransactionEntity> {
     throw new Error('Method not implemented.');
