@@ -4,11 +4,10 @@ import { SeederService } from './seeder/seeder.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(SeederModule);
-  app.setGlobalPrefix('api');
 
   const seeder = app.get(SeederService);
+  await seeder.resetDatabase();
   await seeder.seed();
-
 
   await app.close();
 }
