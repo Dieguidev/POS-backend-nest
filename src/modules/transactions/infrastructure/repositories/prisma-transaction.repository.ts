@@ -59,13 +59,23 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
           0,
         ) / 100;
 
+      let couponName: string;
+      let discount: number;
+
       if (createTransactionDto.coupon) {
-        const coupon = this.couponsService.applyCoupon(createTransactionDto.coupon);
+        const coupon = await this.couponsService.applyCoupon(
+          createTransactionDto.coupon,
+        );
+        couponName = coupon.name;
+
+        discount = Math.round((coupon.percentage / 100) * total * 100) / 100;
       }
 
       return prisma.transaction.create({
         data: {
           total,
+          coupon: couponName,
+          discount,
           contents: {
             createMany: {
               data: createTransactionDto.contents,
