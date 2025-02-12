@@ -7,6 +7,7 @@ import { PrismaModule } from './shared/database/prisma.module';
 import { ProductsModule } from './modules/products/products.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { CouponsModule } from './modules/coupons/coupons.module';
+import { SeederModule } from './seeder/seeder.module';
 
 
 @Module({
