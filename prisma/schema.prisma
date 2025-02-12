@@ -68,6 +68,8 @@ model Product {
 model Transaction {
   id    Int   @id @default(autoincrement())
   total Float
+  coupon String?
+  discount Float?
 
   transactionDate DateTime             @default(now())
   updatedAt       DateTime             @updatedAt

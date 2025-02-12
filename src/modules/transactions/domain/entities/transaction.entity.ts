@@ -5,5 +5,7 @@ export class TransactionEntity {
   total: number;
   transactionDate: Date;
   updatedAt: Date;
+  coupon?: string;
+  discount?: number;
   contents: TransactionContentEntity[];
 }
