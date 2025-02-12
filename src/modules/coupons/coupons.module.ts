@@ -7,5 +7,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [CouponsController],
   providers: [CouponsService],
   imports: [AuthModule],
+  exports: [CouponsService],
 })
 export class CouponsModule {}
