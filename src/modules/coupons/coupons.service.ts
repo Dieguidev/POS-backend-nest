@@ -57,7 +57,11 @@ export class CouponsService {
       throw new UnprocessableEntityException('Cupon expirado');
     }
 
-    return coupon;
+    return {
+      message: 'Cupón Válido',
+      ...coupon
+
+    }
 
   }
 }
