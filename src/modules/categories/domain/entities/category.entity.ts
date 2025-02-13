@@ -1,3 +1,4 @@
+import { Product } from "src/modules/products/domain/entities/product.entity";
 
 
 export class Category {
@@ -6,6 +7,7 @@ export class Category {
 
   createdAt: Date;
   updatedAt: Date;
+  products?: Product[]
 
 }
 
