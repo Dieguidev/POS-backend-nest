@@ -4,6 +4,7 @@ import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { CategoryRepository } from '../../domain/repository/CategoryRepository';
 
 
+
 @Injectable()
 export class CategoriesService {
 
@@ -19,8 +20,8 @@ export class CategoriesService {
     return this.categoryRepository.findAllCategories();
   }
 
-  findOne(id: number) {
-    return this.categoryRepository.findCategoryById(id);
+  findOne(id: number, products?: string) {
+    return this.categoryRepository.findCategoryById(id, products);
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {
