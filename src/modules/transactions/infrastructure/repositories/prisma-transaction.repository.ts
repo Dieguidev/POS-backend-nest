@@ -7,12 +7,14 @@ import { TransactionsRepository } from '../../domain/repositories/TransactionsRe
 import { TransactionEntity } from '../../domain/entities/transaction.entity';
 import { PrismaService } from 'src/shared/database/prisma.service';
 import { CreateTransactionDto } from '../../application/dto/create-transaction.dto';
-import { NotFoundError } from 'rxjs';
-import { log } from 'console';
+import { CouponsService } from '../../../coupons/coupons.service';
 
 @Injectable()
 export class PrismaTransactionsRepository implements TransactionsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly couponsService: CouponsService,
+  ) {}
 
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
@@ -57,11 +59,23 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
           0,
         ) / 100;
 
-      console.log(total);
+      let couponName: string;
+      let discount: number;
+
+      if (createTransactionDto.coupon) {
+        const coupon = await this.couponsService.applyCoupon(
+          createTransactionDto.coupon,
+        );
+        couponName = coupon.name;
+
+        discount = Math.round((coupon.percentage / 100) * total * 100) / 100;
+      }
 
       return prisma.transaction.create({
         data: {
           total,
+          coupon: couponName,
+          discount,
           contents: {
             createMany: {
               data: createTransactionDto.contents,
