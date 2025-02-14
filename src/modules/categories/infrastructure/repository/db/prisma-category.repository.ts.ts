@@ -48,7 +48,12 @@ export class PrismaCategoryRepository implements CategoryRepository {
         id,
       },
       include: {
-        products: products === 'true' ? true : false,
+        products: products === 'true' ? {
+          orderBy: {
+            id: 'asc',
+          }
+        } : false,
+
       },
     });
     if (!category) {
