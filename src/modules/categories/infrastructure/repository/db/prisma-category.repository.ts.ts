@@ -49,6 +49,11 @@ export class PrismaCategoryRepository implements CategoryRepository {
       },
       include: {
         products: products === 'true' ? {
+          where: {
+            inventory: {
+              gt: 0
+            }
+          },
           orderBy: {
             id: 'asc',
           }
