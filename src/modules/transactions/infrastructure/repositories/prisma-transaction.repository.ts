@@ -18,7 +18,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
-  ): Promise<TransactionEntity> {
+  ): Promise<string> {
     const transaction = await this.prisma.$transaction(async (prisma) => {
       const productIds = createTransactionDto.contents.map(
         (content) => content.productId,
@@ -29,16 +29,20 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
       const productMap = new Map(products.map((p) => [p.id, p]));
 
+      const errors = []
+
       for (const content of createTransactionDto.contents) {
         const product = productMap.get(content.productId);
         if (!product) {
+          errors.push(`El producto con el id ${content.productId} no existe`);
           throw new NotFoundException(
-            `El producto con el id ${content.productId} no existe`,
+            errors
           );
         }
         if (product.inventory < content.quantity) {
+          errors.push(`El articulo ${product.name} excede la cantidad disponible`);
           throw new BadRequestException(
-            `El articulo ${product.name} excede la cantidad disponible`,
+            errors
           );
         }
       }
@@ -86,7 +90,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
       });
     });
 
-    return transaction;
+    return "Transacción generada con éxito";
   }
   async findAllTransactions(date: Date): Promise<TransactionEntity[]> {
     const startOfDay = new Date(date.setUTCHours(0, 0, 0, 0));

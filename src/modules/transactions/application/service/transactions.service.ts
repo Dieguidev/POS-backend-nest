@@ -10,8 +10,11 @@ export class TransactionsService {
     private readonly transactionsRepository: TransactionsRepository,
   ) {}
 
-  create(createTransactionDto: CreateTransactionDto) {
-    return this.transactionsRepository.createTransaction(createTransactionDto);
+  async create(createTransactionDto: CreateTransactionDto) {
+    const response = await this.transactionsRepository.createTransaction(createTransactionDto);
+    console.log(response);
+
+    return { message: response}
   }
 
   findAll(transactionDate: string) {
@@ -21,6 +24,7 @@ export class TransactionsService {
         throw new BadRequestException('Fecha no válida');
       }
       return this.transactionsRepository.findAllTransactions(date);
+
     }
   }
 
