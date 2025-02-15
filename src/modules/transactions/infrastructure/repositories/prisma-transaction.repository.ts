@@ -103,7 +103,9 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
           lte: endOfDay,
         },
       },
-      include: { contents: true },
+      include: { contents: {
+        include: { product: true }
+      } },
     });
     return transactions;
   }
