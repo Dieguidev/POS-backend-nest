@@ -6,6 +6,7 @@ import { ProductRepository } from './domain/repositories/ProductRepository';
 import { PrismaProductRepository } from './infrastructure/repository/prisma-product.repository';
 import { PrismaService } from 'src/shared/database/prisma.service';
 import { PrismaModule } from 'src/shared/database/prisma.module';
+import { UploadImageModule } from '../upload-image/upload-image.module';
 
 
 @Module({
@@ -18,6 +19,6 @@ import { PrismaModule } from 'src/shared/database/prisma.module';
     },
 
   ],
-  imports: [AuthModule, PrismaModule]
+  imports: [AuthModule, PrismaModule, UploadImageModule]
 })
 export class ProductsModule {}
