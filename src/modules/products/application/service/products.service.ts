@@ -9,8 +9,13 @@ import { ProductPaginationDto } from '../dto/product-pagination.dto';
 export class ProductsService {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  create(createProductDto: CreateProductDto) {
-    return this.productRepository.createProduct(createProductDto);
+  async create(createProductDto: CreateProductDto) {
+    const response = await this.productRepository.createProduct(
+      createProductDto,
+    );
+    return {
+      message: response,
+    };
   }
 
   async findAll(productPaginationDto: ProductPaginationDto) {

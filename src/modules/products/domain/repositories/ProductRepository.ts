@@ -5,7 +5,7 @@ import { ProductPaginationDto } from '../../application/dto/product-pagination.d
 import { UpdateProductDto } from '../../application/dto/update-product.dto';
 
 export abstract class ProductRepository {
-  abstract createProduct(createproductDto: CreateProductDto): Promise<Product>;
+  abstract createProduct(createproductDto: CreateProductDto): Promise<String>;
   abstract updateProduct(id: number, updateProductDto: UpdateProductDto): Promise<Product>;
   abstract deleteProduct(id: number): Promise<string>;
   abstract findProductById(id: number): Promise<Product>;
