@@ -8,6 +8,7 @@ import { ProductsModule } from './modules/products/products.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { CouponsModule } from './modules/coupons/coupons.module';
 import { MemoryMonitorModule } from './modules/memory-monitor';
+import { UploadImageModule } from './modules/upload-image/upload-image.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MemoryMonitorModule } from './modules/memory-monitor';
     TransactionsModule,
     CouponsModule,
     MemoryMonitorModule,
+    UploadImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
