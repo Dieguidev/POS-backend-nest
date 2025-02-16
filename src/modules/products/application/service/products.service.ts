@@ -50,7 +50,10 @@ export class ProductsService {
     return this.productRepository.updateProduct(id, updateProductDto);
   }
 
-  remove(id: number) {
-    return this.productRepository.deleteProduct(id);
+  async remove(id: number) {
+    const response = await this.productRepository.deleteProduct(id);
+    return {
+      message: response,
+    };
   }
 }
