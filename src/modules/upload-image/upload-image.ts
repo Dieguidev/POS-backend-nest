@@ -1,4 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {v2 as cloudinary} from 'cloudinary'
+import { envs } from 'src/config/envs'
 
-@Injectable()
-export class UploadImage {}
+export const UploadImageProvider = {
+  provide: 'CLOUDINARY',
+  useFactory: () => {
+    return cloudinary.config({
+      cloud_name: envs.cloudinaryCloudName,
+      api_key: envs.cloudinaryApiKey,
+      api_secret: envs.cloudinaryApiSecret
+    })
+  }
+}
