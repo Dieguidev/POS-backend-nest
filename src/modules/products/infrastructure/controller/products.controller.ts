@@ -65,6 +65,6 @@ export class ProductsController {
       throw new BadRequestException('La imagen es obligatoria');
     }
 
-    return this.uploadImageService.updateProductImage(id, file);
+    return this.uploadImageService.uploadFile(file);
   }
 }

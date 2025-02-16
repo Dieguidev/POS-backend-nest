@@ -12,7 +12,7 @@ export class PrismaProductRepository implements ProductRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<String> {
-    const { name, price, categoryId, inventory } = createProductDto;
+    const { name, price, categoryId, inventory, image } = createProductDto;
     const category = await this.prisma.category.findUnique({
       where: {
         id: categoryId,
@@ -27,6 +27,7 @@ export class PrismaProductRepository implements ProductRepository {
         price,
         inventory,
         categoryId: category.id,
+        image
       },
     });
 
