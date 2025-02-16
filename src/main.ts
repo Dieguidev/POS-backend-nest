@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import * as morgan from 'morgan';
 
 
 async function bootstrap() {
@@ -16,9 +17,11 @@ async function bootstrap() {
     })
   );
 
-  app.useStaticAssets(join(__dirname, '../public'));
+  app.useStaticAssets(join(__dirname, '../public'), {
+    prefix: '/api/',
+  });
 
-  app
+  app.use(morgan('combined'));
 
   await app.listen(4000);
 }

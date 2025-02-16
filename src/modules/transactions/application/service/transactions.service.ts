@@ -3,15 +3,26 @@ import { CreateTransactionDto } from '../dto/create-transaction.dto';
 import { UpdateTransactionDto } from '../dto/update-transaction.dto';
 import { TransactionsRepository } from '../../domain/repositories/TransactionsRepository';
 import { isValid, parseISO } from 'date-fns';
+import { MemoryMonitorService } from 'src/modules/memory-monitor';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     private readonly transactionsRepository: TransactionsRepository,
+    private readonly memoryMonitor: MemoryMonitorService,
   ) {}
 
-  create(createTransactionDto: CreateTransactionDto) {
-    return this.transactionsRepository.createTransaction(createTransactionDto);
+  async create(createTransactionDto: CreateTransactionDto) {
+    const antes = this.memoryMonitor.getMemorySnapshot();
+    const response = await this.transactionsRepository.createTransaction(
+      createTransactionDto,
+    );
+    const despues = this.memoryMonitor.getMemorySnapshot();
+    console.log('Diferencia:', {
+      antes: antes.heap.used,
+      despues: despues.heap.used,
+    });
+    return { message: response };
   }
 
   findAll(transactionDate: string) {

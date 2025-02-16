@@ -24,7 +24,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
   async updateCategory(id: number, name: string): Promise<Category> {
     await this.findCategoryById(id);
-     return await this.prisma.category.update({
+    return await this.prisma.category.update({
       where: {
         id,
       },
@@ -42,10 +42,23 @@ export class PrismaCategoryRepository implements CategoryRepository {
     });
     return 'Categoria eliminada';
   }
-  async findCategoryById(id: number): Promise<Category> {
+  async findCategoryById(id: number, products?: string): Promise<Category> {
     const category = await this.prisma.category.findUnique({
       where: {
         id,
+      },
+      include: {
+        products: products === 'true' ? {
+          where: {
+            inventory: {
+              gt: 0
+            }
+          },
+          orderBy: {
+            id: 'asc',
+          }
+        } : false,
+
       },
     });
     if (!category) {

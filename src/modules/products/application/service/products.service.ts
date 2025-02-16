@@ -9,8 +9,13 @@ import { ProductPaginationDto } from '../dto/product-pagination.dto';
 export class ProductsService {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  create(createProductDto: CreateProductDto) {
-    return this.productRepository.createProduct(createProductDto);
+  async create(createProductDto: CreateProductDto) {
+    const response = await this.productRepository.createProduct(
+      createProductDto,
+    );
+    return {
+      message: response,
+    };
   }
 
   async findAll(productPaginationDto: ProductPaginationDto) {
@@ -45,7 +50,10 @@ export class ProductsService {
     return this.productRepository.updateProduct(id, updateProductDto);
   }
 
-  remove(id: number) {
-    return this.productRepository.deleteProduct(id);
+  async remove(id: number) {
+    const response = await this.productRepository.deleteProduct(id);
+    return {
+      message: response,
+    };
   }
 }

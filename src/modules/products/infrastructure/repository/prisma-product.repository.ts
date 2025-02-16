@@ -11,7 +11,7 @@ import { UpdateProductDto } from '../../application/dto/update-product.dto';
 export class PrismaProductRepository implements ProductRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+  async createProduct(createProductDto: CreateProductDto): Promise<String> {
     const { name, price, categoryId, inventory } = createProductDto;
     const category = await this.prisma.category.findUnique({
       where: {
@@ -30,13 +30,12 @@ export class PrismaProductRepository implements ProductRepository {
       },
     });
 
-    return product;
+    return 'Producto Agregado correctamente';
   }
   async updateProduct(
     id: number,
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
-
     const { categoryId, inventory, name, price } = updateProductDto;
     if (categoryId) {
       const category = await this.prisma.category.findUnique({
@@ -86,12 +85,15 @@ export class PrismaProductRepository implements ProductRepository {
     const products = await this.prisma.product.findMany({
       where: { categoryId: category_id ? category_id : undefined },
       include: {
-        category: { select: { name: true, id: true } },
+        category: category_id
+          ? { select: { name: true, id: true } }
+          : undefined,
       },
       orderBy: { createdAt: 'desc' },
       skip,
       take: limit,
     });
+
     return products;
   }
   async countAllProducts(category_id: number): Promise<number> {

@@ -5,6 +5,7 @@ import { TransactionsRepository } from './domain/repositories/TransactionsReposi
 import { PrismaTransactionsRepository } from './infrastructure/repositories/prisma-transaction.repository';
 import { PrismaModule } from 'src/shared/database/prisma.module';
 import { CouponsModule } from '../coupons/coupons.module';
+import { MemoryMonitorModule } from '../memory-monitor';
 
 
 
@@ -17,6 +18,6 @@ import { CouponsModule } from '../coupons/coupons.module';
       useClass: PrismaTransactionsRepository
     }
   ],
-  imports: [PrismaModule, CouponsModule],
+  imports: [PrismaModule, CouponsModule, MemoryMonitorModule],
 })
 export class TransactionsModule {}
