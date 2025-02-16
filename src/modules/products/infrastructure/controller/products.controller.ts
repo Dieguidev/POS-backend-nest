@@ -47,6 +47,7 @@ export class ProductsController {
     @Param('id', IdValidationPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
   ) {
+    console.log('updateProductDto', updateProductDto);
     return this.productsService.update(+id, updateProductDto);
   }
 

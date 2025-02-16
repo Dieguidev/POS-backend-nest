@@ -37,7 +37,7 @@ export class PrismaProductRepository implements ProductRepository {
     id: number,
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
-    const { categoryId, inventory, name, price } = updateProductDto;
+    const { categoryId, inventory, name, price, image } = updateProductDto;
     if (categoryId) {
       const category = await this.prisma.category.findUnique({
         where: {
@@ -49,6 +49,8 @@ export class PrismaProductRepository implements ProductRepository {
       }
     }
 
+
+
     await this.findProductById(id);
     return await this.prisma.product.update({
       where: { id },
@@ -56,6 +58,7 @@ export class PrismaProductRepository implements ProductRepository {
         categoryId,
         inventory,
         name,
+        image,
         price,
       },
     });
